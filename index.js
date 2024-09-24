@@ -53,7 +53,7 @@ const verifyToken = (req, res, next) => {
     if (err) {
       return res.status(401).send({ message: 'Not authorized' });
     }
-    console.log(req.user)
+    // console.log(req.user)
     req.user = decoded; // Assign the decoded token to req.user for later use
     next(); // Proceed only if the token is valid
   });
@@ -68,7 +68,7 @@ async function run() {
   try {
 
     await client.connect();
-    console.log("Connected to MongoDB!");
+    // console.log("Connected to MongoDB!");
 
     const database = client.db("formresponses");
     const consultationsCollection = database.collection("freeConsultation");
@@ -79,7 +79,7 @@ async function run() {
 
     app.post('/jwt', async (req, res) => {
       const user = req.body;
-      console.log(user);
+      // console.log(user);
       const token = jwt.sign(user, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '1h' })
       res
         .cookie('token', token, {
@@ -371,5 +371,5 @@ app.get('/', (req, res) => {
 });
 
 app.listen(port, () => {
-  console.log(`Server is running on port ${port}`);
+  // console.log(`Server is running on port ${port}`);
 });
