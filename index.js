@@ -11,7 +11,7 @@ const port = process.env.PORT || 5000;
 
 // Middleware
 app.use(cors({
-  origin: ['http://localhost:5173', 'http://localhost:5174'],
+  origin: ['http://localhost:5173', 'http://localhost:5174', 'https://alphaoneedu.com/'],
   credentials: true,
 }));
 app.use(express.json());
@@ -67,7 +67,7 @@ async function run() {
 
   try {
 
-    await client.connect();
+    // await client.connect();
     // console.log("Connected to MongoDB!");
 
     const database = client.db("formresponses");
@@ -357,7 +357,7 @@ async function run() {
 
 
   } catch (error) {
-    console.error("MongoDB connection error:", error);
+    // console.error("MongoDB connection error:", error);
   }
 
 
@@ -371,5 +371,5 @@ app.get('/', (req, res) => {
 });
 
 app.listen(port, () => {
-  // console.log(`Server is running on port ${port}`);
+  console.log(`Server is running on port ${port}`);
 });
