@@ -10,10 +10,26 @@ const app = express();
 const port = process.env.PORT || 5000;
 
 // Middleware
-app.use(cors({
-  origin: ['http://localhost:5173', 'http://localhost:5174', 'https://alphaoneedu.com/'],
-  credentials: true,
-}));
+const allowedOrigins = ['http://localhost:5173', 'http://localhost:5174', 'https://alphaoneedu.com'];
+
+// Define a CORS options delegate function
+const corsOptionsDelegate = function (req, callback) {
+  let corsOptions;
+
+  if (allowedOrigins.includes(req.header('Origin'))) {
+    corsOptions = {
+      origin: req.header('Origin'), // Allow the request origin
+      credentials: (req.header('Origin') === 'https://alphaoneedu.com') ? false : true, // Conditionally set credentials
+    };
+  } else {
+    corsOptions = { origin: false }; // Disallow requests from other origins
+  }
+
+  callback(null, corsOptions); // Pass options to the cors middleware
+};
+
+// Use the CORS middleware with dynamic options
+app.use(cors(corsOptionsDelegate));
 app.use(express.json());
 app.use(cookieParser())
 
