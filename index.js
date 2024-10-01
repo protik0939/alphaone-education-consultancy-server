@@ -92,6 +92,7 @@ async function run() {
     const consultationsCollection = database.collection("freeConsultation");
     const messagesCollection = database.collection("contactsendmessage");
     const appliedCollection = database.collection("applied");
+    const allNotice = database.collection("notices");
 
 
 
@@ -350,6 +351,62 @@ async function run() {
     });
 
 
+    // notice sending code 
+
+    app.post('/notices', async (req, res) => {
+      const formData = req.body;
+      try {
+        const result = await allNotice.insertOne(formData);
+        res.status(200).json({ message: 'Notice uploaded successfully!', data: result });
+      } catch (error) {
+        console.error('Error saving notice:', error);
+        res.status(500).json({ message: 'Error saving notice', error });
+      }
+    });
+
+
+    app.get('/notices', async (req, res) => {
+      try {
+        const notices = await allNotice.find().toArray();
+        res.status(200).json(notices);
+      } catch (error) {
+        console.error('Error:', error);
+        res.status(500).json({ message: 'Error:', error });
+      }
+    });
+
+    app.get('/notices/:id', async (req, res) => {
+      const { id } = req.params;
+      try {
+        const message = await allNotice.findOne({ _id: new ObjectId(id) });
+        if (message) {
+          res.status(200).json(message);
+        } else {
+          res.status(404).json({ message: 'Nothing Found' });
+        }
+      } catch (error) {
+        console.error('Error retrieving data:', error);
+        res.status(500).json({ message: 'Error retrieving data', error });
+      }
+    });
+
+
+    app.delete('/notices/:id',  async (req, res) => {
+      const { id } = req.params;
+
+      try {
+        const result = await allNotice.deleteOne({ _id: new ObjectId(id) });
+        if (result.deletedCount > 0) {
+          res.status(200).json({ message: 'Notice deleted successfully!' });
+        } else {
+          res.status(404).json({ message: 'Notice not found' });
+        }
+      } catch (error) {
+        console.error('Error deleting Notice:', error);
+        res.status(500).json({ message: 'Error deleting Notice', error });
+      }
+    });
+
 
 
     // email sending code
@@ -372,6 +429,11 @@ async function run() {
         res.status(500).json({ message: 'Error sending email', error });
       }
     });
+
+
+
+
+
 
 
   } catch (error) {
