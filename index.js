@@ -11,10 +11,8 @@ const port = process.env.PORT || 5000;
 
 // Middleware
 const allowedOrigins = [
-  'https://sso.alphaoneedu.com',
   'https://alphaoneedu.com',
-  'http://localhost:5173',
-  'http://localhost:5174'
+  'https://sso.alphaoneedu.com'
 ];
 
 // CORS middleware with dynamic options
