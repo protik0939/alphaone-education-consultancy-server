@@ -104,7 +104,7 @@ async function run() {
 
 
 
-    app.post('/jwt', async (req, res) => {
+    app.post('/jwt', cors(corsOptionsDelegate), async (req, res) => {
       const user = req.body;
       // console.log(user);
       const token = jwt.sign(user, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '1h' })
@@ -117,7 +117,7 @@ async function run() {
         .send({ Success: true })
     })
 
-    app.post('/logout', (req, res) => {
+    app.post('/logout', cors(corsOptionsDelegate), (req, res) => {
       // Clear the token cookie
       res.clearCookie('token', {
         httpOnly: true,  // Ensures the cookie is only sent over HTTP(S), not client JavaScript
@@ -128,7 +128,7 @@ async function run() {
 
 
 
-    app.post('/freeConsultation', async (req, res) => {
+    app.post('/freeConsultation', cors(corsOptionsDelegate), async (req, res) => {
       const formData = req.body;
       try {
         const result = await consultationsCollection.insertOne(formData);
@@ -139,7 +139,7 @@ async function run() {
       }
     });
 
-    app.get('/freeConsultation', verifyToken, async (req, res) => {
+    app.get('/freeConsultation', verifyToken, cors(corsOptionsDelegate), async (req, res) => {
       try {
         const consultations = await consultationsCollection.find().toArray();
         res.status(200).json(consultations);
@@ -150,7 +150,7 @@ async function run() {
     });
 
 
-    app.get('/freeConsultation/:id', verifyToken, async (req, res) => {
+    app.get('/freeConsultation/:id', verifyToken, cors(corsOptionsDelegate), async (req, res) => {
       const { id } = req.params;
 
       try {
@@ -166,7 +166,7 @@ async function run() {
       }
     });
 
-    app.put('/freeConsultation/:id', async (req, res) => {
+    app.put('/freeConsultation/:id', cors(corsOptionsDelegate), async (req, res) => {
       const { id } = req.params;
       const { status } = req.body;
 
@@ -187,7 +187,7 @@ async function run() {
       }
     });
 
-    app.delete('/freeConsultation/:id', verifyToken, async (req, res) => {
+    app.delete('/freeConsultation/:id', verifyToken, cors(corsOptionsDelegate), async (req, res) => {
       const { id } = req.params;
 
       try {
@@ -205,7 +205,7 @@ async function run() {
 
 
 
-    app.post('/contactsendmessage', async (req, res) => {
+    app.post('/contactsendmessage', cors(corsOptionsDelegate), async (req, res) => {
       const formData = req.body;
       try {
         const result = await messagesCollection.insertOne(formData);
@@ -216,7 +216,7 @@ async function run() {
       }
     });
 
-    app.get('/contactsendmessage', verifyToken, async (req, res) => {
+    app.get('/contactsendmessage', verifyToken, cors(corsOptionsDelegate), async (req, res) => {
       try {
         const contactSendMessageResponse = await messagesCollection.find().toArray();
         res.status(200).json(contactSendMessageResponse);
@@ -226,7 +226,7 @@ async function run() {
       }
     });
 
-    app.get('/contactsendmessage/:id', verifyToken, async (req, res) => {
+    app.get('/contactsendmessage/:id', verifyToken, cors(corsOptionsDelegate), async (req, res) => {
       const { id } = req.params;
 
       try {
@@ -243,7 +243,7 @@ async function run() {
     });
 
     // Add this inside your run function after the GET routes
-    app.put('/contactsendmessage/:id', async (req, res) => {
+    app.put('/contactsendmessage/:id', cors(corsOptionsDelegate), async (req, res) => {
       const { id } = req.params;
       const { status } = req.body;
 
@@ -264,7 +264,7 @@ async function run() {
       }
     });
 
-    app.delete('/contactsendmessage/:id', verifyToken, async (req, res) => {
+    app.delete('/contactsendmessage/:id', verifyToken, cors(corsOptionsDelegate), async (req, res) => {
       const { id } = req.params;
 
       try {
@@ -282,7 +282,7 @@ async function run() {
 
 
 
-    app.post('/applied', async (req, res) => {
+    app.post('/applied', cors(corsOptionsDelegate), async (req, res) => {
       const formData = req.body;
       try {
         const result = await appliedCollection.insertOne(formData);
@@ -294,7 +294,7 @@ async function run() {
     });
 
 
-    app.get('/applied', verifyToken, async (req, res) => {
+    app.get('/applied', verifyToken, cors(corsOptionsDelegate), async (req, res) => {
       try {
         const appliedFormResponse = await appliedCollection.find().toArray();
         res.status(200).json(appliedFormResponse);
@@ -305,7 +305,7 @@ async function run() {
     });
 
 
-    app.get('/applied/:id', verifyToken, async (req, res) => {
+    app.get('/applied/:id', verifyToken, cors(corsOptionsDelegate), async (req, res) => {
       const { id } = req.params;
 
       try {
@@ -321,7 +321,7 @@ async function run() {
       }
     });
 
-    app.put('/applied/:id', async (req, res) => {
+    app.put('/applied/:id', cors(corsOptionsDelegate), async (req, res) => {
       const { id } = req.params;
       const { status } = req.body;
 
@@ -342,7 +342,7 @@ async function run() {
       }
     });
 
-    app.delete('/applied/:id', verifyToken, async (req, res) => {
+    app.delete('/applied/:id', verifyToken, cors(corsOptionsDelegate), async (req, res) => {
       const { id } = req.params;
 
       try {
@@ -361,7 +361,7 @@ async function run() {
 
     // notice sending code 
 
-    app.post('/notices', async (req, res) => {
+    app.post('/notices', cors(corsOptionsDelegate), async (req, res) => {
       const formData = req.body;
       try {
         const result = await allNotice.insertOne(formData);
@@ -373,7 +373,7 @@ async function run() {
     });
 
 
-    app.get('/notices', async (req, res) => {
+    app.get('/notices', cors(corsOptionsDelegate), async (req, res) => {
       try {
         const notices = await allNotice.find().toArray();
         res.status(200).json(notices);
@@ -383,7 +383,7 @@ async function run() {
       }
     });
 
-    app.get('/notices/:id', async (req, res) => {
+    app.get('/notices/:id', cors(corsOptionsDelegate), async (req, res) => {
       const { id } = req.params;
       try {
         const message = await allNotice.findOne({ _id: new ObjectId(id) });
@@ -399,7 +399,7 @@ async function run() {
     });
 
 
-    app.delete('/notices/:id', async (req, res) => {
+    app.delete('/notices/:id', cors(corsOptionsDelegate), async (req, res) => {
       const { id } = req.params;
 
       try {
@@ -419,7 +419,7 @@ async function run() {
 
     // email sending code
 
-    app.post('/send-email', async (req, res) => {
+    app.post('/send-email', cors(corsOptionsDelegate), async (req, res) => {
       const { to, subject, text } = req.body;
 
       const mailOptions = {
