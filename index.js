@@ -10,30 +10,38 @@ const app = express();
 const port = process.env.PORT || 5000;
 
 // Middleware
-const allowedOrigins = [
-  'https://alphaoneedu.com',
-  'https://sso.alphaoneedu.com'
-];
+const clientSite = 'https://alphaoneedu.com';
+const adminSite = 'https://sso.alphaoneedu.com';
 
-// CORS middleware with dynamic options
-const corsOptionsDelegate = function (req, callback) {
+// General CORS configuration
+const corsOptionsDelegate = (req, callback) => {
   let corsOptions;
 
-  // Check if the origin is in the allowedOrigins list
-  if (allowedOrigins.includes(req.header('Origin'))) {
+  // Apply CORS policy for the client site (no cookies)
+  if (req.header('Origin') === clientSite) {
     corsOptions = {
-      origin: req.header('Origin'), // Allow requests from the allowed origins
-      credentials: true,            // Allow cookies and credentials to be sent
-      methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'], // Specify allowed methods
-      allowedHeaders: ['Content-Type', 'Authorization'], // Specify allowed headers
+      origin: clientSite,
+      methods: ['GET', 'POST', 'OPTIONS'], // Only allow public methods
+      credentials: false, // No cookies needed
     };
-  } else {
-    corsOptions = { origin: false }; // Block requests from disallowed origins
+  }
+  // Apply CORS policy for the admin site (with cookies)
+  else if (req.header('Origin') === adminSite) {
+    corsOptions = {
+      origin: adminSite,
+      methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+      credentials: true, // Allow cookies
+    };
+  }
+  // Deny other origins
+  else {
+    corsOptions = { origin: false };
   }
 
-  callback(null, corsOptions); // Pass the options to CORS middleware
+  callback(null, corsOptions);
 };
 
+// Use CORS middleware with the dynamic options
 app.use(cors(corsOptionsDelegate));
 
 
