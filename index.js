@@ -379,7 +379,7 @@ async function run() {
     });
 
 
-    app.get('/notices', async (req, res) => {
+    app.get('/notices', cors(corsOptionsDelegate), async (req, res) => {
       try {
         const notices = await allNotice.find().toArray();
         res.status(200).json(notices);
