@@ -10,8 +10,8 @@ const app = express();
 const port = process.env.PORT || 5000;
 
 // Middleware
-const clientSite = 'http://localhost:5174';
-const adminSite = 'http://localhost:5173';
+const clientSite = 'https://alphaoneedu.com';
+const adminSite = 'https://sso.alphaoneedu.com';
 
 // General CORS configuration
 const corsOptionsDelegate = (req, callback) => {
