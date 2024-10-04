@@ -10,8 +10,8 @@ const app = express();
 const port = process.env.PORT || 5000;
 
 // Middleware
-const clientSite = 'https://alphaoneedu.com';
-const adminSite = 'https://sso.alphaoneedu.com';
+const clientSite = 'http://localhost:5174';
+const adminSite = 'http://localhost:5173';
 
 // General CORS configuration
 const corsOptionsDelegate = (req, callback) => {
@@ -65,10 +65,9 @@ const client = new MongoClient(uri, {
 
 
 const transporter = nodemailer.createTransport({
-  service: 'gmail', // Use your email service (e.g., Gmail)
-  host: "smtp.ethereal.email",
-  port: 587,
-  secure: false,
+  host: "smtp.titan.email",
+  port: 465,
+  secure: true,
   auth: {
     user: process.env.SENDER_EMAIL, // Your email address
     pass: process.env.SENDER_PASS, // Your email password or app-specific password
@@ -426,15 +425,13 @@ async function run() {
     // email sending code
 
     app.post('/send-email', async (req, res) => {
-      const { to, subject, text } = req.body;
-
+      const { to, subject, html } = req.body;
       const mailOptions = {
-        from: process.env.EMAIL_USER, // Sender address
+        from: process.env.SENDER_EMAIL, // Sender address
         to, // List of recipients
         subject, // Subject of the email
-        text, // Plain text body
+        html, // Plain html
       };
-
       try {
         const info = await transporter.sendMail(mailOptions);
         res.status(200).json({ message: 'Email sent successfully!', info });
